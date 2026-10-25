@@ -1,10 +1,15 @@
 # SQUP-PitNETs
 
-Code-only release of downstream analysis methods for a PitNET large-field SEM
-study. Research data are supplied separately and are **not included** here.
+Code-only release of core reconstruction/geometry/atlas algorithms and downstream
+analysis methods. Research data and fitted models are supplied separately and
+are **not included** here.
 
 ## Scope
 
+- Boundary-aware 2-D instance reconstruction from binary semantic predictions.
+- Eight morphology features, object locations and tile-wise eligibility filters.
+- Standardised-feature consensus K-means and within-cluster prototype centres.
+- Frozen local-Mahalanobis nearest-prototype voting with external class mappings.
 - Fixed-physical-area density and morphology-composition sampling.
 - Count-weighted C1-C4 total variation distance, coverage requirements and
   secondary-component under-call calculations.
@@ -12,8 +17,8 @@ study. Research data are supplied separately and are **not included** here.
   profiles, plus optional summaries of supplied field-level measurement errors.
 - Exact tissue-mask/grid intersection areas with fractional boundary handling.
 
-This repository does not provide segmentation training, inference, watershed,
-independent instance validation, atlas refitting or membrane-distance extraction.
+This repository does not provide neural-network training/inference, independent
+instance validation, membrane-distance extraction or study-fitted model values.
 It does not contain case identifiers, observed measurements, clinical records,
 images, checkpoints, manuscript templates, archived result tables or private
 provenance files. Generated test fixtures are explicitly synthetic software
@@ -27,6 +32,7 @@ Python 3.10 or 3.11:
 python -m pip install -r requirements.txt
 python -m unittest discover -s tests -v
 python run.py --help
+python core.py --help
 ```
 
 GitHub Actions uses only synthetic tests. No research data or secrets are needed.
@@ -37,9 +43,21 @@ Keep inputs and outputs outside this checkout. Replace the placeholders with
 your own input location, output location and reference identifier:
 
 ```sh
+python core.py instances --foreground /path/to/inputs/foreground.tif --boundary /path/to/inputs/boundary.tif --output-dir /path/to/instances
+python core.py features --labels /path/to/instances/instances.npy --output-dir /path/to/features
+python core.py fit --input-csv /path/to/inputs/reference_features.csv --output-dir /path/to/model
+python core.py assign --input-csv /path/to/inputs/application_features.csv --atlas /path/to/model/atlas.npz --output-dir /path/to/assigned
 python run.py spatial --input-dir /path/to/private/inputs --reference-id REFERENCE_ID --area-mode corrected --output-dir /path/to/private/results
 python run.py sg --input-csv /path/to/private/composition_inputs.csv --output-dir /path/to/private/sg_results
 ```
+
+The first two core commands operate on one registered 2-D field at a time.
+Concatenate eligible feature rows with unique case/tile/object keys before
+reference fitting or application transfer. Use the same pixel calibration and
+feature order for reference and application profiles. Existing study assignments
+must use the separately supplied **frozen** atlas, not a new refit. Cluster labels
+from a refit are arbitrary; no hormone names or study-specific class mapping are
+embedded. See [core algorithm details](docs/CORE.md) for conventions and schemas.
 
 The SG command optionally accepts `--field-measurements` for a separate per-field
 measurement CSV. The input schemas are described in [docs/INPUTS.md](docs/INPUTS.md).

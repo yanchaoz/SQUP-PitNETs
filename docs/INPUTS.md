@@ -6,6 +6,10 @@ gzip-compressed CSV. Identifiers are strings, not necessarily numeric.
 
 ## Spatial inputs
 
+Core image, eight-feature table and frozen atlas schemas are specified in
+[CORE.md](CORE.md). Core outputs do not automatically construct the spatial
+grids below: tissue areas, coordinates and accepted linking remain required.
+
 Place the following files in the external `--input-dir`:
 
 - `case_order.json`: nonempty ordered list of unique specimen identifiers.

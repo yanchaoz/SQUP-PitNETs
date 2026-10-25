@@ -56,13 +56,15 @@ uses medians within each case followed by a summary across those case medians.
 
 Optional measurement summaries take the absolute supplied count and occupied-
 area error percentages. This is internal measurement agreement when inputs share
-production boundaries, not independent instance-level accuracy. The code does
-not relabel objects, fit a new atlas or select fields based on favourable errors.
+production boundaries, not independent instance-level accuracy. This summary
+command does not relabel objects, fit a new atlas or select fields based on
+favourable errors. The separate core commands are described in [CORE.md](CORE.md).
 
 The atlas feature names are area, perimeter, maximum principal-axis span,
 major-axis length, aspect ratio, extent, convexity and axis skewness. The legacy
 column `feret_max_px` refers to maximum principal-axis span, not an all-angle
-Feret diameter. This release does not re-extract shape features from contours.
+Feret diameter. `core.py features` implements these eight archived definitions;
+the SG summary command consumes already computed aggregates.
 
 ## Exact area kernel
 

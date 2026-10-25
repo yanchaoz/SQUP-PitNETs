@@ -28,3 +28,5 @@ jobs:
         run: python -m unittest discover -s tests -v
       - name: CLI usage
         run: python run.py --help
+      - name: Core CLI usage
+        run: python core.py --help
