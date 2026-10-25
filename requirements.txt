@@ -1,0 +1,7 @@
+numpy==1.26.4
+pandas==2.3.3
+scipy==1.15.3
+scikit-image==0.25.2
+scikit-learn==1.7.2
+nibabel==5.4.2
+tifffile==2025.5.10
